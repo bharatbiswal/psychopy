@@ -51,6 +51,14 @@ class attributeSetter(object):
     def __repr__(self):
         return repr(self.__getattribute__)
 
+def getAttribute(self, attrib):
+    try:
+        aValue = getattr(self, attrib)
+    except AttributeError:
+        # attribute is not set yet. Set it to None to skip
+        # operation and just set value.
+        aValue = None
+    return aValue
 
 def setAttribute(self, attrib, value, log,
                  operation=False, stealth=False):

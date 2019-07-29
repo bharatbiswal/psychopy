@@ -31,7 +31,7 @@ import psychopy.event
 # tools must only be imported *after* event or MovieStim breaks on win32
 # (JWP has no idea why!)
 from psychopy.tools.monitorunittools import cm2pix, deg2pix, convertToPix
-from psychopy.tools.attributetools import attributeSetter, setAttribute
+from psychopy.tools.attributetools import attributeSetter, setAttribute, getAttribute
 from psychopy.visual.basevisual import (BaseVisualStim, ColorMixin,
     ContainerMixin)
 
@@ -352,6 +352,9 @@ class TextStim(BaseVisualStim, ColorMixin, ContainerMixin):
         but use this method if you need to suppress the log message.
         """
         setAttribute(self, 'text', text, log)
+
+    def getText(self):
+        return getAttribute(self, 'text')
 
     def _setTextShaders(self, value=None):
         """Set the text to be rendered using the current font
