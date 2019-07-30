@@ -435,6 +435,11 @@ class Slider(MinimalStim):
         """
         return self.rating
 
+    def setRating(self, arating):
+        """Set the current value of rating (or None if no response yet)
+        """
+        self.rating = arating
+
     def getRT(self):
         """Get the RT for most recent rating (or None if no response yet)
         """
