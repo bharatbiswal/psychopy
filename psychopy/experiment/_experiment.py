@@ -837,6 +837,44 @@ class Experiment(object):
 
         return resources
 
+    def routineByNameExists(self, aRoutineName):
+        for routineName, routine in self.routines.items():
+            if routineName == aRoutineName :
+                return True
+        return False
+
+    def addFlowElement(self, ele):
+        self.flow.append(ele)
+
+    def copyRoutinesAndFlowsToTarget(self, targetExp, skipRoutinesArr=[]):
+
+        for routineName, routine in self.routines.items():
+            if  routineName not in skipRoutinesArr:
+                if targetExp.routineByNameExists(routineName) == True:
+                    logging.warn('Duplicate routine by name=['+routineName+'] found under experiment=['+self.getExpName()+']')
+                else:
+                    targetExp.addRoutine(routineName, routine)
+            else:
+                logging.warn('Skipping routine by name=['+routineName+'] found under experiment=['+self.getExpName()+']')
+
+        for element in self.flow:
+            if element.getType() == 'Routine':
+                if element.params['name'] in skipRoutinesArr:
+                    continue
+            targetExp.addFlowElement(element)
+
+    def generateMasterExperimentByCombiningExperimentsInSequence(version, inpFilesArray, masterName, skipRoutinesArr=[]):
+
+        outExp = Experiment()
+        outExp.setExpName(masterName)
+
+        for infile in inpFilesArray:
+            aExp = Experiment()
+            aExp.loadFromXML(infile)
+            aExp.psychopyVersion = version
+            aExp.copyRoutinesAndFlowsToTarget(outExp, skipRoutinesArr)
+        
+        outExp.saveToXML(masterName)
 
 class ExpFile(list):
     """An ExpFile is similar to a Routine except that it generates its code
